@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e7c86">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SayItRight">
+<title>SayItRight – Luyện phát âm tiếng Anh</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f8f5;--card:#fff;--ink:#17324d;--mute:#60758a;--acc:#0e9aa7;--acc2:#0b7a85;--acc-ink:#fff;--sun:#ffc83d;--good:#1b9e5a;--mid:#c58a00;--bad:#e0505a;--line:#d7e6e1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a24;--card:#172836;--ink:#eaf3f8;--mute:#9db4c6;--acc:#37c3d0;--acc2:#2aa3af;--acc-ink:#06242a;--good:#4cd08a;--mid:#f0b429;--bad:#ff8088;--line:#26405a}}
+:root[data-theme="dark"]{--bg:#0e1a24;--card:#172836;--ink:#eaf3f8;--mute:#9db4c6;--acc:#37c3d0;--acc2:#2aa3af;--acc-ink:#06242a;--good:#4cd08a;--mid:#f0b429;--bad:#ff8088;--line:#26405a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Nunito","Segoe UI",system-ui,sans-serif}
+h1,h2,.sent,.ring b{font-family:"Baloo 2","Nunito",system-ui,sans-serif}
+main{position:relative;max-width:560px;margin:0 auto;padding:16px 16px 110px}
+[hidden]{display:none!important}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.hello{display:flex;gap:12px;align-items:center}#mas{width:56px;height:56px;flex:none}
+h1{font-size:22px;margin:0;line-height:1.2}.sub{margin:0;color:var(--mute);font-size:14px}
+.flame{background:var(--card);border:2px solid var(--sun);border-radius:20px;padding:4px 12px;font-weight:700;font-size:18px}
+h2{font-size:18px;margin:0 0 12px}
+.goalrow{display:flex;gap:10px;align-items:center;margin-bottom:12px;font-size:13px;color:var(--mute)}
+.goal{flex:1;height:12px;background:var(--line);border-radius:8px;overflow:hidden}
+.goal i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--acc));border-radius:8px;transition:width .5s}
+.levels{display:flex;gap:8px;margin:0 -16px 14px;padding:2px 16px;overflow-x:auto;scrollbar-width:none}
+.levels button{flex:none;padding:8px 16px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:24px;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.levels button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:22px;margin-bottom:14px}
+.cnt{font-size:13px;color:var(--mute);margin:0 0 6px}
+.sent{font-size:30px;line-height:1.35;font-weight:700;margin:0 0 6px}
+.sent span{border-bottom:4px solid transparent;cursor:pointer;border-radius:3px}
+.sent .good{color:var(--good);border-color:var(--good)}.sent .mid{color:var(--mid);border-color:var(--mid)}.sent .bad{color:var(--bad);border-color:var(--bad)}
+.vi{color:var(--mute);margin:0 0 12px}
+.tip{background:var(--bg);border-radius:14px;padding:10px 14px;margin:0 0 16px;font-size:15px}
+.row{display:flex;gap:10px;justify-content:center}
+button.sec{padding:10px 18px;border-radius:22px;border:2px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.micwrap{text-align:center;margin:18px 0 4px}
+button.mic{width:92px;height:92px;border-radius:50%;border:0;background:var(--acc);color:var(--acc-ink);font-size:38px;cursor:pointer;box-shadow:0 6px 0 var(--acc2);transition:transform .1s,box-shadow .1s}
+button.mic:active{transform:translateY(4px);box-shadow:0 2px 0 var(--acc2)}
+button.mic.rec{background:var(--bad);box-shadow:0 6px 0 #a93a42;color:#fff}
+.mlabel{display:block;margin-top:12px;font-weight:700;color:var(--mute);font-size:15px}
+.wave{display:none;gap:4px;justify-content:center;align-items:center;height:30px}
+.rec~.wave,.wave.on{display:flex}.wave i{width:6px;height:10px;background:var(--bad);border-radius:3px;animation:wv .8s infinite ease-in-out}
+.wave i:nth-child(2){animation-delay:.15s}.wave i:nth-child(3){animation-delay:.3s}.wave i:nth-child(4){animation-delay:.45s}
+@keyframes wv{50%{height:28px}}
+@media(prefers-reduced-motion:reduce){.wave i{animation:none}}
+button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+#result{margin-top:14px;min-height:20px}
+.res{display:flex;gap:16px;align-items:center;background:var(--bg);border-radius:18px;padding:14px}
+.ring{flex:none;width:78px;height:78px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center}
+.ring b{width:60px;height:60px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:24px}
+.res p{margin:2px 0 0;font-size:14px;color:var(--mute)}.res strong{font-size:18px}
+.hint{color:var(--mute);margin:6px 0 0;font-size:14px}
+.nav{display:flex;justify-content:space-between;margin-bottom:14px}
+.warn{background:var(--card);border:2px solid var(--bad);padding:12px;border-radius:16px;margin-bottom:14px;display:none;font-size:14px}
+.big{font-family:"Baloo 2",sans-serif;font-size:44px;font-weight:700;line-height:1}
+.bars{display:flex;gap:8px;align-items:flex-end;height:100px}
+.bars div{flex:1;text-align:center;font-size:12px;color:var(--mute)}
+.bars i{display:block;background:var(--acc);border-radius:8px 8px 0 0;min-height:4px;margin-bottom:4px}
+.weak{display:flex;flex-wrap:wrap;gap:8px}.weak span{background:var(--bg);border:2px solid var(--bad);color:var(--bad);border-radius:16px;padding:2px 12px;font-weight:600}
+.tabs{z-index:20;position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:2px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;border:0;background:none;color:var(--mute);font:inherit;font-weight:700;font-size:14px;padding:8px;border-radius:14px;cursor:pointer}
+.tabs button[aria-current="page"]{color:var(--acc2);background:var(--bg)}
+.cf{position:fixed;top:-30px;font-size:24px;pointer-events:none;animation:fall 1.6s ease-in forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(300deg)}}
+.unit{color:var(--acc2);font-weight:700;font-size:13px;margin:0}
+.ltitle{font-family:"Baloo 2",sans-serif;font-style:italic;color:#b5651d;font-size:28px;margin:0 0 2px;line-height:1.2}
+.task{margin:6px 0 10px;font-weight:700}.task b:first-child{color:var(--good);margin-right:6px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.ctrl select{padding:9px 12px;border-radius:22px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+button.go{padding:10px 18px;border-radius:22px;border:0;background:var(--acc);color:var(--acc-ink);font:inherit;font-weight:700;cursor:pointer}
+.smsg{background:var(--sun);color:#17324d;font-weight:700;border-radius:14px;padding:8px 14px;margin-bottom:10px;font-size:15px}
+.dlg{overflow:hidden}
+.pic{float:right;width:34%;max-width:190px;border-radius:14px;margin:0 0 8px 12px}
+.ln{padding:6px 8px;border-radius:12px;line-height:1.7;transition:background .2s}
+.ln.now{background:rgba(255,200,61,.25)}.ln.rec{background:rgba(224,80,90,.18)}
+.who{font-weight:600;margin-right:6px}
+.tx span{border-bottom:3px solid transparent;border-radius:2px}
+.tx .good{color:var(--good);border-color:var(--good)}.tx .mid{color:var(--mid);border-color:var(--mid)}.tx .bad{color:var(--bad);border-color:var(--bad)}
+.ib{border:0;background:none;font-size:19px;cursor:pointer;padding:2px 5px;vertical-align:middle}
+.lsc{font-weight:800;font-size:14px;margin-left:4px}
+.big small{font-size:16px;color:var(--mute)}
+.ln:only-child,.ln:not(:has(.ib)){color:var(--mute)}
+@media(max-width:480px){.pic{float:none;display:block;width:auto;max-width:100%;max-height:170px;margin:0 auto 10px}}
+
+.hr{display:flex;gap:10px;align-items:center}.flame{white-space:nowrap}header h1{font-size:20px}.tabs button{font-size:12px;padding:8px 2px;white-space:nowrap}
+.avatar{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--acc);color:var(--acc-ink);font:700 18px "Baloo 2",sans-serif;cursor:pointer;overflow:hidden;padding:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.umenu{position:absolute;right:16px;top:72px;z-index:30;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.umenu[hidden],.overlay[hidden],.toast[hidden]{display:none}
+.overlay{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}
+.overlay.mo{background:rgba(10,20,30,.6)}
+.lcard{max-width:380px;width:100%;text-align:center}.lcard svg{width:84px;height:84px}
+.lcard h1{font-size:28px;margin:6px 0}
+.oauth{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;font-size:16px;cursor:pointer;margin-bottom:10px}
+.oauth b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:14px}
+.oauth.g b{background:#ea4335}.oauth.f b{background:#1877f2}
+.or{color:var(--mute);font-size:13px;margin:8px 0}
+.lcard input{width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin-bottom:10px}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:14px;font-size:14px}
+.sbar{position:sticky;top:0;z-index:5;margin-bottom:10px}
+.sctl{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:6px 8px}
+.sctl[hidden]{display:none}
+.sctl span{flex:1;font-size:13px;color:var(--mute);min-width:120px}
+.sctl button{padding:6px 10px;font-size:13px}
+.vbox{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:10px 14px;margin-bottom:10px;font-size:14px}
+.vbox summary{cursor:pointer;font-weight:600}
+.vbox label{display:block;margin:8px 0}
+.vbox select{width:100%;margin-top:4px;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}
+.kpis b{display:block;font:700 24px "Baloo 2",sans-serif}.kpis span{font-size:11px;color:var(--mute)}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.heat span{aspect-ratio:1;border-radius:6px;background:var(--line)}.heat span.on{background:var(--good)}.heat span.today{outline:2px solid var(--acc)}
+.up{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:14px}.up>span{flex:1.3;min-width:0}.up .goal{flex:1;margin:0}.up>b{width:44px;text-align:right}
+.lg{display:flex;gap:10px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line)}.lt{color:var(--mute);flex:none;width:76px}.lg>span:nth-child(2){flex:1}
+.ln.dots{color:var(--mute)}
+.tl{padding-left:18px;margin:8px 0 14px}.tl li{margin:4px 0}
+.crit{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.ch{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}.ch .lvn{margin-left:auto;font-weight:700}
+.mute{color:var(--mute);font-size:13px}
+.seg{display:flex;gap:4px;margin:8px 0}.seg i{flex:1;height:10px;border-radius:5px;background:var(--line)}.seg i.on{background:var(--acc)}
+.crit .en{font-size:13px;font-style:italic;color:var(--mute);margin:4px 0}.crit .vn{margin:2px 0;font-size:15px}
+.dl.pos{color:var(--good)}.dl.neg{color:var(--bad)}
+
+:root{--wk:#2a6fd6;--st:#d64a5a}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--wk:#7db4ff;--st:#ff8f9a}}
+:root[data-theme="dark"]{--wk:#7db4ff;--st:#ff8f9a}
+.seg2{display:flex;gap:8px;margin-bottom:12px}
+.seg2 button{flex:1;padding:10px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.phead{margin:4px 0 8px;line-height:1.2}
+.pill{display:inline-block;background:#b5651d;color:#fff;font:700 18px "Baloo 2",sans-serif;border-radius:20px;padding:2px 14px;margin-right:8px}
+.ptitle{font:italic 700 21px "Baloo 2",sans-serif;color:#b5651d}
+.rem{background:#fff5dc;border:2px solid #f2c14e;border-radius:16px;padding:12px 18px;margin:12px 0;color:#17324d}
+.rem h4{margin:0 0 6px;color:#e8662a;font:700 24px "Baloo 2",sans-serif}
+.rem ul{margin:0;padding-left:20px}.rem li,.rem p{margin:6px 0;font-size:16px}
+.ex{font-size:17px;margin:18px 0 10px;line-height:1.4}.ex b{color:var(--good);margin-right:6px;font-size:21px}
+.pit,.cell{display:flex;align-items:flex-start;gap:6px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.pit .nm{color:#b5651d;min-width:24px;font-size:18px}
+.ct,.tx2{flex:1;font-size:18px;line-height:1.55}
+.w.hl{color:var(--wk);font-weight:600}.w.wk{color:var(--wk);font-weight:700}.w.stg{color:var(--st);font-weight:700}
+.pit .w,.cell .w{border-bottom:3px solid transparent}
+.pit .w.good,.cell .w.good{border-color:var(--good)}.pit .w.mid,.cell .w.mid{border-color:var(--mid)}.pit .w.bad,.cell .w.bad{border-color:var(--bad)}
+.ipa{display:block;color:var(--mute);font-size:15px}.ipa.wk{color:var(--wk)}.ipa.stg{color:var(--st)}
+.fullf{color:var(--mute);font-size:15px;margin-top:2px}
+.psc{font-weight:800;font-size:14px;min-width:26px;text-align:right;padding-top:6px}
+.recing{background:rgba(224,80,90,.15);border-radius:12px}
+.ib.on{background:var(--bad);border-radius:50%}
+.ws{display:grid;grid-template-columns:1fr 1fr;border:2px solid var(--line);border-radius:14px;overflow:hidden}
+.ws .h{padding:10px;text-align:center;font-size:18px}.ws .h.w1{background:#dbe8fb;color:#245fb8}.ws .h.s1{background:#ffe6cc;color:#c0561b}
+.ws .cell{border-top:1px solid var(--line);border-bottom:0;padding:10px 6px}
+.ws .cell+.cell{border-left:1px solid var(--line)}
+.dlgp{border:2px solid var(--line);border-radius:14px;padding:6px 10px;margin-top:12px}
+.who{font-weight:600}
+.opt{display:inline-block}
+.ob{border:0;background:none;color:#b5651d;font:inherit;cursor:pointer;padding:0 2px;border-radius:6px}
+.ob.sel{background:#ffe0b3;color:#17324d;font-weight:700}.ob.ok{background:var(--good);color:#fff}.ob.bad{background:var(--bad);color:#fff}.ob.truth{outline:2px dashed var(--good)}
+.gp{border:0;background:none;padding:0 1px;font-size:20px;line-height:1;color:var(--line);cursor:pointer;vertical-align:baseline}
+.gp.on{color:var(--acc2);font-weight:700}.gp.ok{color:var(--good);font-weight:700}.gp.bad{color:var(--bad);font-weight:700;text-decoration:line-through}.gp.miss{color:var(--mid);font-weight:700}
+.pk{cursor:pointer;border-radius:4px;padding:0 1px}
+.pk.u{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-color:var(--acc2)}
+.pk.ok{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-color:var(--good);color:var(--good);font-weight:700}
+.pk.bad{text-decoration:underline line-through;text-decoration-color:var(--bad);color:var(--bad)}
+.pk.miss{text-decoration:underline dashed;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-color:var(--mid);color:var(--mid);font-weight:700}
+@media(max-width:480px){.ws .cell{flex-wrap:wrap}.ct,.tx2{font-size:17px}}
+
+.seg2 button{font-size:14px;padding:10px 4px}
+.vbox label.chk{display:flex;gap:8px;align-items:center;font-weight:600}
+.ring.sm{width:52px;height:52px;flex:none}.ring.sm b{width:40px;height:40px;font-size:17px}
+.subtabs{display:flex;gap:6px;overflow-x:auto;margin:10px -16px;padding:2px 16px;scrollbar-width:none}
+.subtabs button,.pillb{flex:none;padding:7px 12px;border-radius:18px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.subtabs button[aria-pressed="true"],.pillb[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.tkcard{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px;margin:10px 0}
+.tkrow{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}.tkrow.wrap{flex-wrap:wrap}
+.fillb{padding:6px 10px;border-radius:14px;border:2px dashed var(--line);background:none;color:var(--ink);font:inherit;font-size:14px;cursor:pointer;text-align:left}
+.chat{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.bub{max-width:94%;padding:10px 14px;border-radius:18px;font-size:16px;line-height:1.5}
+.bub.ai{align-self:flex-start;background:var(--card);border:2px solid var(--line)}
+.bub.me{align-self:flex-end;background:var(--acc);color:var(--acc-ink)}
+.bub.me .w{border-bottom:3px solid transparent}.bub.me .w.good{border-color:#9bffc4}.bub.me .w.mid{border-color:#ffe08a}.bub.me .w.bad{border-color:#ffb3b8}
+.bub .mm,.mm{font-size:12px;color:var(--mute)}.bub.me .mm{color:inherit;opacity:.85}
+.aih{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+.fb{margin:4px 0 0;padding-left:0;list-style:none}.fb li{margin:6px 0;font-size:15px}
+.composer{position:sticky;bottom:64px;background:var(--bg);padding:8px 0 4px}
+.composer input,.anin{width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+.lk{color:var(--acc2);font-weight:700}
+.skrow{display:flex;align-items:center;gap:8px;padding:10px 4px;border-bottom:1px solid var(--line);touch-action:pan-y}
+.skw{font-size:24px;font-weight:600;flex:1}.skw.big{font-size:34px;text-align:center}
+.sk{border:0;background:none;color:var(--bad);font:inherit;font-size:24px;cursor:pointer;padding:0 2px;transition:opacity .3s}
+.sk.struck{text-decoration:line-through;opacity:.35}.sk.ghost{opacity:.15}.sk.static{cursor:default}
+.skrow.playing{background:rgba(255,200,61,.2);border-radius:12px}
+.spq{font-size:22px;font-weight:600;margin:6px 0}.spt{font-size:28px;font-weight:700;color:var(--bad);min-height:34px}
+.cmpg{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cmpb{border:2px solid var(--line);border-radius:14px;padding:8px;text-align:center}
+.cmpb .wsvg{width:100%;height:60px}
+.okt{color:var(--good);font-weight:600}
+.schips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.sc{padding:2px 10px;border-radius:14px;border:2px solid var(--line);font-size:14px}
+.sc.st{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);font-weight:700;font-size:17px}
+.sc.wk{color:var(--mute)}.sc.dis{border-style:dashed;border-color:var(--bad)}
+.gsvg{width:100%;height:auto;margin-top:6px}
+.sres{margin-top:6px}
+.wsres{min-width:0}
+.cst{font-size:14px;margin:4px 0 8px;padding:6px 10px;border-radius:12px;background:var(--card);border:2px solid var(--line)}
+.cst.ok{border-color:var(--good);color:var(--good)}.cst.bad{border-color:var(--bad);color:var(--bad)}
+.src{margin:0 4px 0 -2px;font-size:15px}
+.diag{white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:8px;margin-top:8px}
+.pat{display:block;font-size:13px;margin:8px 0}.pat select{width:100%;margin-top:4px;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.skrow2{border-bottom:1px solid var(--line);padding:8px 4px;touch-action:pan-y}
+.skrow2.playing{background:rgba(255,200,61,.2);border-radius:12px}
+.skline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.composer2{margin-top:8px}.pin{width:100%;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;margin:6px 0}
+.xbox .chat{margin:8px 0}
+.ib.nudge{animation:nud 1.2s infinite;border-radius:50%;background:rgba(255,200,61,.5)}
+@keyframes nud{50%{box-shadow:0 0 0 7px rgba(255,200,61,.55)}}
+@media(prefers-reduced-motion:reduce){.ib.nudge{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="hello"><svg id="mas" viewBox="0 0 60 60" aria-hidden="true"><rect x="4" y="4" width="52" height="52" rx="20" fill="var(--acc)"/><rect x="14" y="2" width="32" height="10" rx="5" fill="var(--sun)"/><circle cx="21" cy="26" r="6" fill="#fff"/><circle cx="39" cy="26" r="6" fill="#fff"/><circle cx="22" cy="27" r="2.8" fill="#17324d"/><circle cx="38" cy="27" r="2.8" fill="#17324d"/><path id="mm" d="M20 38 Q30 48 40 38" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg><div><h1 id="hi">Chào bạn!</h1><p class="sub" id="sub"></p></div></div>
+<div class="hr"><div class="flame" title="Chuỗi ngày học">🔥 <span id="streak">0</span></div><button class="avatar" id="me" aria-label="Tài khoản"></button></div></header>
+<div class="umenu" id="umenu" hidden><b id="mname"></b><p class="hint" id="mprov"></p><p class="hint" id="appver"></p><label class="pat">⏱ Chờ khi bạn ngừng nói<select id="patience"><option value="2000">2 giây</option><option value="3000" selected>3 giây (mặc định)</option><option value="4500">4,5 giây (nói chậm)</option><option value="6000">6 giây (rất chậm)</option></select></label><button class="sec" id="bout">Đăng xuất</button></div>
+<div class="warn" id="warn"></div>
+
+<section id="v1">
+<div class="goalrow"><div class="goal"><i id="gbar"></i></div><span id="gl"></span></div>
+<div class="levels" id="levels"></div>
+<section class="card">
+<p class="cnt" id="cnt"></p><p class="sent" id="sent"></p><p class="vi" id="vi"></p><p class="tip" id="tip"></p>
+<div class="row"><button class="sec" id="listen">🔊 Nghe mẫu</button><button class="sec" id="speed">Chậm</button></div>
+<div class="micwrap"><button class="mic" id="mic" aria-label="Bấm để nói">🎙️</button><div class="wave"><i></i><i></i><i></i><i></i></div><span class="mlabel" id="mlabel">Bấm vào micro và đọc to câu trên</span></div>
+<div id="result" aria-live="polite"></div>
+</section>
+<div class="nav"><button class="sec" id="prev">← Câu trước</button><button class="sec" id="next">Câu tiếp →</button></div>
+</section>
+
+<section id="v3" hidden>
+<div class="levels" id="units"></div>
+<div class="seg2"><button id="mdD" aria-pressed="true">💬 Hội thoại</button><button id="mdP" aria-pressed="false">🔤 Pronunciation</button><button id="mdT" aria-pressed="false">🗣️ Nói tự do</button></div>
+<details class="vbox"><summary>🎧 Giọng đọc: <b id="vcur">…</b></summary>
+<label class="chk"><input type="checkbox" id="useclip" checked> Dùng giọng thu âm của sách (Unit 1–4)</label>
+<label>Giọng nữ (Ms Hoa, Mai, Ms Smith, Ms Pang)<select id="vf"></select></label>
+<label>Giọng nam (Mark, Nam, Mr Quang)<select id="vm"></select></label>
+<button class="sec" id="vtest">🔊 Nghe thử hội thoại</button> <button class="sec" id="adiag">🔧 Kiểm tra âm thanh</button><pre class="diag" id="adiagout" hidden></pre><p class="hint" id="vhint"></p></details>
+<div id="dlgwrap">
+<p class="unit" id="uname"></p><h2 class="ltitle" id="ltitle"></h2>
+<p class="task"><b>1</b>Listen and read. 🎧</p>
+<p class="cst" id="clipst"></p>
+<div class="ctrl"><button class="sec" id="playall">▶ Nghe cả bài</button><button class="go" id="shadow">🎤 Shadowing cả bài</button><select id="role" aria-label="Chọn vai"></select><select id="lspeed" aria-label="Tốc độ nghe"><option value="0.75">Nghe chậm</option><option value="0.9" selected>Nghe vừa</option><option value="1">Nghe thường</option></select><select id="pass" aria-label="Điểm cần đạt"><option value="70">Đạt từ 70</option><option value="80" selected>Đạt từ 80</option><option value="90">Đạt từ 90</option></select></div>
+<div class="sbar"><div class="smsg" id="smsg"></div><div class="sctl" id="sctl" hidden><span id="satt"></span><button class="sec" id="spause">⏸ Tạm dừng</button><button class="sec" id="sdone">✅ Nói xong</button><button class="sec" id="sskip">⏭ Bỏ qua câu</button><button class="sec" id="sstop">⏹ Kết thúc</button></div></div>
+<div class="dlg"><img class="pic" id="pic" alt=""><div id="lines"></div></div>
+<div id="sumry"></div>
+</div>
+<div id="pron" hidden></div>
+<div id="talk" hidden></div>
+</section>
+
+<section id="v4" hidden><div id="tbox"></div></section>
+
+<section id="v2" hidden>
+<div id="ptest"></div>
+<section class="card"><h2>Tổng quan</h2><div class="kpis"><div><b id="k1">0</b><span>Ngày liên tiếp</span></div><div><b id="k2">0</b><span>Lượt đọc</span></div><div><b id="k3">0</b><span>Câu đạt</span></div><div><b id="k4">0</b><span>Bài test</span></div><div><b id="avg">–</b><span>Điểm TB</span></div></div></section>
+<section class="card"><h2>28 ngày gần đây</h2><div class="heat" id="heat"></div><p class="hint" id="heatnote"></p></section>
+<section class="card"><h2>Điểm trung bình 7 ngày</h2><div class="bars" id="bars"></div></section>
+<section class="card"><h2>Tiến độ bài học lớp 11</h2><div id="uprog"></div></section>
+<section class="card"><h2>Từ bạn hay đọc sai</h2><div class="weak" id="weak"></div><p class="hint">Chọn nhóm “Từ yếu” ở tab Luyện nói để luyện riêng các từ này.</p></section>
+<section class="card"><h2>Nhật ký hoạt động</h2><div id="actlog"></div></section>
+</section>
+</main>
+<nav class="tabs"><button data-v="v1" aria-current="page">🎙️ Luyện nói</button><button data-v="v3">📖 Lớp 11</button><button data-v="v4">🧪 Test</button><button data-v="v2">📊 Tiến độ</button></nav>
+<div class="toast" id="toast" hidden></div>
+<div class="overlay mo" id="modal" hidden><div class="card" style="max-width:380px;margin:0"><h2>Làm bài test phát âm nhé? 🎯</h2><p>Bài test khoảng 6 phút đo 6 tiêu chí (nguyên âm, phụ âm, ngữ điệu, trọng âm từ, nhịp điệu, trọng âm câu) để biết bạn đang ở mức nào.</p><div class="row" style="justify-content:flex-start"><button class="go" id="mgo">Làm ngay</button><button class="sec" id="mlater">Để sau</button></div></div></div>
+<div class="overlay" id="login"><div class="lcard"><svg viewBox="0 0 60 60" aria-hidden="true"><rect x="4" y="4" width="52" height="52" rx="20" fill="var(--acc)"/><rect x="14" y="2" width="32" height="10" rx="5" fill="var(--sun)"/><circle cx="21" cy="26" r="6" fill="#fff"/><circle cx="39" cy="26" r="6" fill="#fff"/><circle cx="22" cy="27" r="2.8" fill="#17324d"/><circle cx="38" cy="27" r="2.8" fill="#17324d"/><path d="M20 38 Q30 48 40 38" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg><h1>SayItRight</h1><p class="sub" style="margin-bottom:18px">Đăng nhập để lưu chuỗi ngày học, điểm số và kết quả test.</p>
+<p id="lload" class="hint">Đang kiểm tra đăng nhập…</p>
+<div id="lbtns" hidden>
+<button class="oauth g" id="bg"><b>G</b>Tiếp tục với Google</button>
+<button class="oauth f" id="bf"><b>f</b>Tiếp tục với Facebook</button>
+<div class="or">hoặc dùng tài khoản trong máy này</div>
+<input id="lname" placeholder="Tên của bạn" maxlength="30" autocomplete="nickname">
+<button class="go" id="blocal" style="width:100%">Vào học</button>
+<p class="hint" id="lnote"></p></div></div></div>
+<script src="js/firebase-config.js"></script>
+<script src="js/lessons.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/rubric.js"></script>
+<script src="js/analysis.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/rec.js"></script>
+<script src="js/feat.js"></script>
+<script src="js/test.js"></script>
+<script src="js/pron.js"></script>
+<script src="js/talk.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
